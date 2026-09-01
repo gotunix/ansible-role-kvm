@@ -6,18 +6,7 @@
     update_cache: yes
   when: ansible_os_family == "Debian"
 
-- name: Ensure KVM and required packages are installed (RedHat/CentOS)
-  yum:
-    name:
-      - qemu-kvm
-      - libvirt
-      - libvirt-client
-      - virt-install
-      - libguestfs-tools
-      - cloud-utils
-      - python3-lxml
-    state: present
-  when: ansible_os_family == "RedHat"
+
 
 - name: Start and enable libvirtd service
   service:
