@@ -53,7 +53,7 @@
     --disk path={{ kvm_vms_dir }}/{{ item.name }}-seed.iso,device=cdrom
     --import
     --os-variant {{ item.os_variant }}
-    --network network={{ kvm_network_name }}
+    --network {{ kvm_network_type }}={{ kvm_network_name }}
     --noautoconsole
   args:
     creates: "/etc/libvirt/qemu/{{ item.name }}.xml"

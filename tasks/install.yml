@@ -24,8 +24,9 @@
     state: started
     enabled: yes
 
-- name: Ensure default network is active and autostarted
+- name: Ensure libvirt network is active and autostarted
   community.libvirt.virt_net:
     name: "{{ kvm_network_name }}"
     state: active
     autostart: yes
+  when: kvm_network_type == "network"

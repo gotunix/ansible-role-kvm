@@ -10,7 +10,12 @@ kvm_packages:
   - xz-utils
 
 kvm_vms_dir: /var/lib/libvirt/images
-kvm_network_name: default
+
+# Networking:
+# 'network' uses a libvirt NAT network (e.g., 'default' virbr0)
+# 'bridge' uses an existing host bridge (e.g., 'br0') allowing VMs to use the host's subnet
+kvm_network_type: "network" 
+kvm_network_name: "default"
 
 kvm_vms:
   - name: alpine-microvm

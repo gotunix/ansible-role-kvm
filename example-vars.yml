@@ -3,6 +3,11 @@
 # Customize these to fit your host's network and storage.
 
 kvm_vms_dir: "/var/lib/libvirt/images"
+
+# To put VMs on the same subnet as the host, you must have a Linux bridge 
+# (e.g. 'br0') configured on your Debian host. 
+# Change type to 'bridge' and name to your host bridge name.
+kvm_network_type: "network"
 kvm_network_name: "default"
 
 kvm_vms:
