@@ -1,0 +1,31 @@
+---
+- name: Ensure KVM and required packages are installed (Debian/Ubuntu)
+  apt:
+    name: "{{ kvm_packages }}"
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+
+- name: Ensure KVM and required packages are installed (RedHat/CentOS)
+  yum:
+    name:
+      - qemu-kvm
+      - libvirt
+      - libvirt-client
+      - virt-install
+      - libguestfs-tools
+      - cloud-utils
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Start and enable libvirtd service
+  service:
+    name: libvirtd
+    state: started
+    enabled: yes
+
+- name: Ensure default network is active and autostarted
+  virt_net:
+    name: "{{ kvm_network_name }}"
+    state: active
+    autostart: yes

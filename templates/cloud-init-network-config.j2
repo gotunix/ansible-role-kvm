@@ -1,0 +1,14 @@
+version: 2
+ethernets:
+  eth0:
+    match:
+      name: e*
+    dhcp4: false
+    addresses:
+      - {{ item.ip_address }}
+    gateway4: {{ item.gateway }}
+    nameservers:
+      addresses:
+{% for ns in item.nameservers %}
+        - {{ ns }}
+{% endfor %}

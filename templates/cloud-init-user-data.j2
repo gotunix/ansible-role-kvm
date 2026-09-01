@@ -1,0 +1,20 @@
+#cloud-config
+hostname: {{ item.name }}
+manage_etc_hosts: true
+
+users:
+  - name: ansible
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub', errors='ignore') | default('ssh-rsa YOUR_SSH_KEY_HERE', true) }}"
+
+chpasswd:
+  expire: False
+  list: |
+    root:password
+    ansible:password
+
+runcmd:
+  - [ sh, -c, "echo 'hello world' > /tmp/hello.txt" ]

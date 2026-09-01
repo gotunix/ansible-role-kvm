@@ -1,0 +1,60 @@
+---
+- name: Ensure VM image directory exists
+  file:
+    path: "{{ kvm_vms_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Download VM cloud images
+  get_url:
+    url: "{{ item.image_url }}"
+    dest: "{{ kvm_vms_dir }}/{{ item.image_name }}"
+    mode: '0644'
+  loop: "{{ kvm_vms }}"
+
+- name: Decompress xz images
+  command: "unxz -k {{ kvm_vms_dir }}/{{ item.image_name }}"
+  args:
+    creates: "{{ kvm_vms_dir }}/{{ item.uncompressed_image_name }}"
+  loop: "{{ kvm_vms }}"
+  when: item.image_name is match('.*\\.xz$')
+
+- name: Create backing disk images for VMs
+  command: "qemu-img create -f qcow2 -b {{ kvm_vms_dir }}/{{ item.uncompressed_image_name | default(item.image_name) }} -F qcow2 {{ kvm_vms_dir }}/{{ item.name }}.qcow2 {{ item.disk_size | default('5G') }}"
+  args:
+    creates: "{{ kvm_vms_dir }}/{{ item.name }}.qcow2"
+  loop: "{{ kvm_vms }}"
+
+- name: Generate cloud-init user-data
+  template:
+    src: "cloud-init-user-data.j2"
+    dest: "/tmp/{{ item.name }}-user-data"
+  loop: "{{ kvm_vms }}"
+
+- name: Generate cloud-init network-config
+  template:
+    src: "cloud-init-network-config.j2"
+    dest: "/tmp/{{ item.name }}-network-config"
+  loop: "{{ kvm_vms }}"
+
+- name: Create cloud-init iso for VMs
+  command: "cloud-localds --network-config /tmp/{{ item.name }}-network-config {{ kvm_vms_dir }}/{{ item.name }}-seed.iso /tmp/{{ item.name }}-user-data"
+  args:
+    creates: "{{ kvm_vms_dir }}/{{ item.name }}-seed.iso"
+  loop: "{{ kvm_vms }}"
+
+- name: Define and start VMs
+  command: >
+    virt-install
+    --name {{ item.name }}
+    --memory {{ item.memory }}
+    --vcpus {{ item.vcpus }}
+    --disk path={{ kvm_vms_dir }}/{{ item.name }}.qcow2,format=qcow2
+    --disk path={{ kvm_vms_dir }}/{{ item.name }}-seed.iso,device=cdrom
+    --import
+    --os-variant {{ item.os_variant }}
+    --network network={{ kvm_network_name }}
+    --noautoconsole
+  args:
+    creates: "/etc/libvirt/qemu/{{ item.name }}.xml"
+  loop: "{{ kvm_vms }}"

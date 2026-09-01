@@ -1,0 +1,52 @@
+---
+kvm_packages:
+  - qemu-kvm
+  - libvirt-daemon-system
+  - libvirt-clients
+  - bridge-utils
+  - virtinst
+  - libguestfs-tools
+  - cloud-image-utils
+  - xz-utils
+
+kvm_vms_dir: /var/lib/libvirt/images
+kvm_network_name: default
+
+kvm_vms:
+  - name: alpine-microvm
+    memory: 512
+    vcpus: 1
+    os_variant: alpinelinux3.18
+    image_url: "https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/cloud/generic-alpine-3.18.4-x86_64.qcow2"
+    image_name: "alpine-3.18.4.qcow2"
+    disk_size: 2G
+    ip_address: "192.168.122.101/24"
+    gateway: "192.168.122.1"
+    nameservers:
+      - "8.8.8.8"
+      - "1.1.1.1"
+  - name: debian-microvm
+    memory: 1024
+    vcpus: 1
+    os_variant: debian12  # virt-install might not have debian13 variant yet on older hosts, fallback to debian12
+    image_url: "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
+    image_name: "debian-13.qcow2"
+    disk_size: 5G
+    ip_address: "192.168.122.102/24"
+    gateway: "192.168.122.1"
+    nameservers:
+      - "8.8.8.8"
+      - "1.1.1.1"
+  - name: freebsd-microvm
+    memory: 1024
+    vcpus: 1
+    os_variant: freebsd14.0
+    image_url: "https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/amd64/Latest/FreeBSD-14.1-RELEASE-amd64-ufs.qcow2.xz"
+    image_name: "freebsd-14.1-ufs.qcow2.xz"
+    uncompressed_image_name: "freebsd-14.1-ufs.qcow2"
+    disk_size: 10G
+    ip_address: "192.168.122.103/24"
+    gateway: "192.168.122.1"
+    nameservers:
+      - "8.8.8.8"
+      - "1.1.1.1"

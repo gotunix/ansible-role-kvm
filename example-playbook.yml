@@ -1,0 +1,11 @@
+---
+- name: Setup KVM and deploy MicroVMs
+  hosts: localhost
+  connection: local
+  become: yes
+  vars_files:
+    - example-vars.yml
+  
+  # When running from within the role directory, we can reference it like this:
+  roles:
+    - role: .

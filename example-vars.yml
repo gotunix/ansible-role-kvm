@@ -1,0 +1,44 @@
+---
+# This file overrides the default variables found in the role's defaults/main.yml
+# Customize these to fit your host's network and storage.
+
+kvm_vms_dir: "/var/lib/libvirt/images"
+kvm_network_name: "default"
+
+kvm_vms:
+  - name: my-custom-alpine
+    memory: 512
+    vcpus: 1
+    os_variant: alpinelinux3.18
+    image_url: "https://dl-cdn.alpinelinux.org/alpine/v3.18/releases/cloud/generic-alpine-3.18.4-x86_64.qcow2"
+    image_name: "alpine-3.18.4.qcow2"
+    disk_size: 2G
+    ip_address: "192.168.122.201/24"
+    gateway: "192.168.122.1"
+    nameservers:
+      - "8.8.8.8"
+
+  - name: my-custom-debian
+    memory: 1024
+    vcpus: 1
+    os_variant: debian12
+    image_url: "https://cloud.debian.org/images/cloud/trixie/latest/debian-13-generic-amd64.qcow2"
+    image_name: "debian-13.qcow2"
+    disk_size: 5G
+    ip_address: "192.168.122.202/24"
+    gateway: "192.168.122.1"
+    nameservers:
+      - "8.8.8.8"
+
+  - name: my-custom-freebsd
+    memory: 1024
+    vcpus: 1
+    os_variant: freebsd14.0
+    image_url: "https://download.freebsd.org/releases/VM-IMAGES/14.1-RELEASE/amd64/Latest/FreeBSD-14.1-RELEASE-amd64-ufs.qcow2.xz"
+    image_name: "freebsd-14.1-ufs.qcow2.xz"
+    uncompressed_image_name: "freebsd-14.1-ufs.qcow2"
+    disk_size: 10G
+    ip_address: "192.168.122.203/24"
+    gateway: "192.168.122.1"
+    nameservers:
+      - "8.8.8.8"

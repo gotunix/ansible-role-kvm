@@ -1,0 +1,6 @@
+---
+- name: Install and configure KVM
+  import_tasks: install.yml
+
+- name: Deploy microVMs
+  import_tasks: deploy.yml
