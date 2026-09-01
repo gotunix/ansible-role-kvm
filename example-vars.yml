@@ -4,11 +4,13 @@
 
 kvm_vms_dir: "/var/lib/libvirt/images"
 
-# To put VMs on the same subnet as the host, you must have a Linux bridge 
-# (e.g. 'br0') configured on your Debian host. 
-# Change type to 'bridge' and name to your host bridge name.
-kvm_network_type: "network"
-kvm_network_name: "default"
+# To put VMs on the same subnet as the host WITHOUT creating a host bridge,
+# you can use 'direct' mode (macvtap). The VMs will attach directly to your host's
+# physical interface. 
+# NOTE: In 'direct' mode, the Host and the VMs cannot communicate with each other directly!
+kvm_network_type: "direct"
+kvm_physical_interface: "eth0" # Change to your host's actual network interface (e.g. enp3s0)
+# kvm_network_name: "default" # Only used if type is 'network' or 'bridge'
 
 kvm_vms:
   - name: my-custom-alpine

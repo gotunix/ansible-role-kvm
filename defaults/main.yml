@@ -14,8 +14,11 @@ kvm_vms_dir: /var/lib/libvirt/images
 # Networking:
 # 'network' uses a libvirt NAT network (e.g., 'default' virbr0)
 # 'bridge' uses an existing host bridge (e.g., 'br0') allowing VMs to use the host's subnet
+# 'direct' uses macvtap to attach directly to a physical interface (e.g., 'eth0' or 'enp3s0') 
+#          without needing a host bridge. Note: The host and VM cannot communicate with each other directly!
 kvm_network_type: "network" 
-kvm_network_name: "default"
+kvm_network_name: "default" # Use this for 'network' (e.g., default) or 'bridge' (e.g., br0)
+# kvm_physical_interface: "eth0" # Required if kvm_network_type is 'direct'
 
 kvm_vms:
   - name: alpine-microvm
