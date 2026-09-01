@@ -15,6 +15,7 @@
       - virt-install
       - libguestfs-tools
       - cloud-utils
+      - python3-lxml
     state: present
   when: ansible_os_family == "RedHat"
 

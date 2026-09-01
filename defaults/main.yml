@@ -8,6 +8,7 @@ kvm_packages:
   - libguestfs-tools
   - cloud-image-utils
   - xz-utils
+  - python3-lxml
 
 kvm_vms_dir: /var/lib/libvirt/images
 
